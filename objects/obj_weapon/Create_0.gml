@@ -10,5 +10,6 @@ WEAPON = {
 		horizontal: 0,
 		vertical: 0
 	},
-	speed: 0
+	speed: 0,
+	xscale: 1
 }

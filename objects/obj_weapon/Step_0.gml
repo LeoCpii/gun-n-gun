@@ -1,1 +1,2 @@
 gravity_weapon();
+reflect();

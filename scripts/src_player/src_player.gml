@@ -63,17 +63,19 @@ function attack() {
 
 function weapon_follow_player() {
 	var _direction = point_direction(x, y, mouse_x, mouse_y * 1.1);
-	var _x = x + lengthdir_x(sprite_height / 2.5, _direction);
-	var _y = y + lengthdir_y(sprite_width / 2.5, _direction);
+	
+	var _x = x + lengthdir_x(sprite_height / 2.5, _direction *  PLAYER.xscale * (-1));
+	var _y = y + lengthdir_y(sprite_width / 2.5, _direction *  PLAYER.xscale * (-1));
 		
 	PLAYER.equipment.x = _x;
 	PLAYER.equipment.y = _y - (sprite_height / 3);
 	PLAYER.equipment.image_angle = _direction;
+	PLAYER.equipment.WEAPON.xscale = PLAYER.xscale;
 }
 
 function can_i_discard_weapon() {
 	var has_objects_in_contact = false;
-	
+
 	with(PLAYER.equipment) {			
 		has_objects_in_contact = place_meeting(x + hspeed, y, obj_block);
 	}
@@ -85,7 +87,8 @@ function discard_weapon() {
 	var can_discard = can_i_discard_weapon();
 	if (PLAYER.key.discart && can_discard) {
 		var _player_speed = abs(PLAYER.movement.horizontal);
-		PLAYER.equipment.speed = _player_speed == 0 ? 5 : 2 * _player_speed;
+		var _speed = _player_speed == 0 ? 7 : 5 * _player_speed;
+		PLAYER.equipment.speed = _speed;
 		PLAYER.equipment.direction = PLAYER.equipment.image_angle;
 		PLAYER.equipment.WEAPON.is_being_carried = noone;
 		PLAYER.equipment.WEAPON.target = noone;
@@ -150,10 +153,10 @@ function state_walking(spr_walking) {
 	var has_horizontal_speed = PLAYER.movement.horizontal != 0;
 
 	if (has_horizontal_speed) {
-		xscale = sign(PLAYER.movement.horizontal);
+		PLAYER.xscale = sign(PLAYER.movement.horizontal);
 	}
 	
-	//image_xscale = xscale * (-1);
+	image_xscale = PLAYER.xscale * (-1);
 }
 
 function state_jumping(spr_jumping) {

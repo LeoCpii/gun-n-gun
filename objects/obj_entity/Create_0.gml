@@ -41,8 +41,6 @@ PLAYER = {
 	},
 	mass: 1,
 	equipment: noone,
-	contact_area: 50
+	contact_area: 50,
+	xscale: 1
 }
-
-xscale = 1;
-

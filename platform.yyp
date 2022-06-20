@@ -4,6 +4,7 @@
     {"id":{"name":"spr_bullet","path":"sprites/spr_bullet/spr_bullet.yy",},"order":1,},
     {"id":{"name":"spr_character_jumping","path":"sprites/spr_character_jumping/spr_character_jumping.yy",},"order":2,},
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},"order":1,},
+    {"id":{"name":"fnt_small","path":"fonts/fnt_small/fnt_small.yy",},"order":0,},
     {"id":{"name":"obj_block","path":"objects/obj_block/obj_block.yy",},"order":5,},
     {"id":{"name":"obj_weapon_gun_pistol","path":"objects/obj_weapon_gun_pistol/obj_weapon_gun_pistol.yy",},"order":2,},
     {"id":{"name":"spr_gun","path":"sprites/spr_gun/spr_gun.yy",},"order":0,},

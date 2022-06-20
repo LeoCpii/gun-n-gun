@@ -6,9 +6,9 @@ function weapon() {
 		weapon_recoil();
 	}
 	slowing_down();
-	
+
 	collision_weapon();
-	x += WEAPON.movement.horizontal;
+
 	y += WEAPON.movement.vertical;
 }
 
@@ -18,8 +18,8 @@ function shoot() {
 		WEAPON.cooldown = firing_cooldown * room_speed;
 		
 		if (WEAPON.ammo) {
-			var _x = lengthdir_x(sprite_height, image_angle);
-			var _y = lengthdir_y(sprite_width, image_angle);
+			var _x = lengthdir_x(sprite_width, image_angle) * WEAPON.xscale;
+			var _y = lengthdir_y(sprite_height, image_angle) * WEAPON.xscale;
 			var _shot = instance_create_layer(x + _x, y + _y, layer, bullet);
 			
 			_shot.speed = firing_speed;
@@ -37,8 +37,11 @@ function weapon_recoil() {
 
 function slowing_down() {
 	if (speed > 0) {
-		speed *= 0.98;
-		if (speed <= 2 ) { speed = 0; } 
+		if (place_meeting(x + hspeed, y, obj_block)) { hspeed *= -0.1; }
+		if (place_meeting(x, y + vspeed, obj_block)) { vspeed *= -0.8; }
+		
+		speed *= 0.9;
+		if (speed <= 0.1 ) { speed = 0; } 
 	}
 }
 
@@ -51,4 +54,8 @@ function gravity_weapon() {
 function collision_weapon() {
 	WEAPON.movement.horizontal = detect_collide("x", WEAPON.movement.horizontal, 0);
 	WEAPON.movement.vertical = detect_collide("y", 0, WEAPON.movement.vertical);
+}
+
+function reflect() {
+	image_yscale = WEAPON.xscale;
 }
