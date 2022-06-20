@@ -1,22 +1,21 @@
 {
-  "name": "obj_player",
   "spriteId": {
     "name": "spr_character_idle",
     "path": "sprites/spr_character_idle/spr_character_idle.yy",
   },
+  "solid": false,
+  "visible": true,
+  "managed": true,
   "spriteMaskId": {
     "name": "spr_character_collision_mask",
     "path": "sprites/spr_character_collision_mask/spr_character_collision_mask.yy",
   },
-  "visible": true,
-  "solid": false,
   "persistent": false,
-  "physicsObject": false,
-  "managed": true,
   "parentObjectId": {
     "name": "obj_entity",
     "path": "objects/obj_entity/obj_entity.yy",
   },
+  "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
   "physicsGroup": 1,
@@ -39,6 +38,7 @@
     "path": "folders/Objects/Character.yy",
   },
   "resourceVersion": "1.0",
+  "name": "obj_player",
   "tags": [],
   "resourceType": "GMObject",
 }

@@ -13,8 +13,8 @@ PLAYER = {
 		left: ord("A"),
 		right: ord("D"),
 		shot: ord("J"),
-		discart: ord("K"),
-		pickup: ord("L")
+		discart: ord("F"),
+		pickup: ord("E")
 	},
 	key: {
 		jump: -1,
@@ -39,7 +39,9 @@ PLAYER = {
 		run: 6,
 		jump: 7
 	},
-	mass: 1
+	mass: 1,
+	equipment: noone,
+	contact_area: 50
 }
 
 xscale = 1;

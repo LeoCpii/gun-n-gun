@@ -4,9 +4,9 @@ function input_check() {
 	PLAYER.key.down = keyboard_check(PLAYER.key_map.down);
 	PLAYER.key.left = keyboard_check(PLAYER.key_map.left);
 	PLAYER.key.right = keyboard_check(PLAYER.key_map.right);
-	PLAYER.key.shot = keyboard_check(PLAYER.key_map.shot);
-	PLAYER.key.discart = keyboard_check(PLAYER.key_map.discart);
-	PLAYER.key.pickup = keyboard_check(PLAYER.key_map.pickup);
+	PLAYER.key.shot = mouse_check_button(mb_left);
+	PLAYER.key.discart = keyboard_check_released(PLAYER.key_map.discart);
+	PLAYER.key.pickup = keyboard_check_released(PLAYER.key_map.pickup);
 }
 #endregion
 
@@ -15,7 +15,7 @@ function movements() {
 	walking();
 	jump();
 	
-	collision();
+	collision_player();
 	
 	x += PLAYER.movement.horizontal;
 	y += PLAYER.movement.vertical;
@@ -26,10 +26,6 @@ function walking() {
 	PLAYER.movement.horizontal = (_horizontal_movement * PLAYER.speed.walk);
 }
 
-function is_stepping_on_the_floor() {
-	return place_meeting(x, y + 1, obj_block);
-}
-
 function jump() {	
 	if (is_stepping_on_the_floor()) {
 		if (PLAYER.key.jump) {
@@ -38,48 +34,82 @@ function jump() {
 	} 
 }
 
-function gravity() {
-	if (!is_stepping_on_the_floor()) {
-		PLAYER.movement.vertical += GRAVITY * PLAYER.mass;
-	} 
+function gravity_player() {
+	PLAYER.movement.vertical += gravity(PLAYER.mass);
 }
 #endregion
 
 #region //COLLISION
-function will_collide(axis) {
-	return axis == "x"
-		? place_meeting(x + PLAYER.movement.horizontal, y, obj_block)
-		: place_meeting(x, y + PLAYER.movement.vertical, obj_block);
+function collision_player() {
+	PLAYER.movement.horizontal = detect_collide("x", PLAYER.movement.horizontal, 0);
+	PLAYER.movement.vertical = detect_collide("y", 0, PLAYER.movement.vertical);
+}
+#endregion
+
+#region //WEAPON
+
+function character_weapon() {
+	if (PLAYER.equipment) {
+		attack();
+		weapon_follow_player();
+		discard_weapon();
+	}
+	pickup_weapon();
 }
 
-function is_colliding(axis) {
-	return axis == "x"
-		? place_meeting(x + sign(PLAYER.movement.horizontal), y, obj_block)
-		: place_meeting(x, y + sign(PLAYER.movement.vertical), obj_block);
+function attack() {
+	PLAYER.equipment.WEAPON.is_shooting = PLAYER.key.shot;
 }
 
-function detect_collide(axis) {
-	if (will_collide(axis)) {
-		while !is_colliding(axis) {
-			if axis == "x" {
-				x += sign(PLAYER.movement.horizontal);
-			} else {
-				y += sign(PLAYER.movement.vertical);
-			}
-		}
+function weapon_follow_player() {
+	var _direction = point_direction(x, y, mouse_x, mouse_y * 1.1);
+	var _x = x + lengthdir_x(sprite_height / 2.5, _direction);
+	var _y = y + lengthdir_y(sprite_width / 2.5, _direction);
 		
-		if axis == "x" {
-			PLAYER.movement.horizontal = 0;
-		} else {
-			PLAYER.movement.vertical = 0;
-		}
+	PLAYER.equipment.x = _x;
+	PLAYER.equipment.y = _y - (sprite_height / 3);
+	PLAYER.equipment.image_angle = _direction;
+}
+
+function can_i_discard_weapon() {
+	var has_objects_in_contact = false;
+	
+	with(PLAYER.equipment) {			
+		has_objects_in_contact = place_meeting(x + hspeed, y, obj_block);
+	}
+		
+	return !has_objects_in_contact;
+}
+
+function discard_weapon() {
+	var can_discard = can_i_discard_weapon();
+	if (PLAYER.key.discart && can_discard) {
+		var _player_speed = abs(PLAYER.movement.horizontal);
+		PLAYER.equipment.speed = _player_speed == 0 ? 5 : 2 * _player_speed;
+		PLAYER.equipment.direction = PLAYER.equipment.image_angle;
+		PLAYER.equipment.WEAPON.is_being_carried = noone;
+		PLAYER.equipment.WEAPON.target = noone;
+		PLAYER.equipment = noone;
 	}
 }
 
-function collision() {
-	detect_collide("x");
-	detect_collide("y");
+function pickup_weapon() {
+	if (PLAYER.key.pickup) {
+		var pickup_list = ds_list_create();
+		var pickup_count = collision_circle_list(x, y, PLAYER.contact_area, obj_weapon, false, true, pickup_list, true);
+		
+		if (pickup_count > 0) {
+			if (PLAYER.equipment == noone) {
+				PLAYER.equipment = pickup_list[| 0];
+				PLAYER.equipment.WEAPON.target = id;
+				PLAYER.equipment.WEAPON.is_being_carried = true;
+			}
+		}
+		
+		ds_list_destroy(pickup_list);
+	}
 }
+
 #endregion
 
 #region //STATE_MACHINE
@@ -123,7 +153,7 @@ function state_walking(spr_walking) {
 		xscale = sign(PLAYER.movement.horizontal);
 	}
 	
-	image_xscale = xscale * (-1);
+	//image_xscale = xscale * (-1);
 }
 
 function state_jumping(spr_jumping) {

@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "spr_block",
-    "path": "sprites/spr_block/spr_block.yy",
+    "name": "spr_floor",
+    "path": "sprites/spr_floor/spr_floor.yy",
   },
   "solid": false,
   "visible": true,
@@ -21,17 +21,15 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-  ],
+  "eventList": [],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Objects",
-    "path": "folders/Objects.yy",
+    "name": "Scenery",
+    "path": "folders/Objects/Scenery.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_block",
+  "name": "obj_floor",
   "tags": [],
   "resourceType": "GMObject",
 }
