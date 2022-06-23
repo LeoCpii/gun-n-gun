@@ -5,4 +5,4 @@ enum E_INDEX {
 	space = 1
 }
 
-global.DEBUG = true;
+global.DEBUG = false;

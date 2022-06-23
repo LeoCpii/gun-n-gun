@@ -10,10 +10,12 @@ function input_check() {
 }
 #endregion
 
-#region //MOVEMENT
-function movements() {
-	walking();
-	jump();
+#region //ACTIONS
+function actions() {
+	if (PLAYER.HP > 0) {
+		walking();
+		jump();
+	}
 	
 	collision_player();
 	
@@ -27,15 +29,25 @@ function walking() {
 }
 
 function jump() {	
-	if (is_stepping_on_the_floor()) {
-		if (PLAYER.key.jump) {
-			PLAYER.movement.vertical = -PLAYER.speed.jump;
-		}
+	if (is_stepping_on_the_floor() && PLAYER.key.jump) {
+		PLAYER.movement.vertical = -PLAYER.speed.jump;
 	} 
 }
 
+#endregion
+
+#region //BEHAVIORS
 function gravity_player() {
 	PLAYER.movement.vertical += gravity(PLAYER.mass);
+}
+
+function direct_player() {
+	var has_horizontal_speed = PLAYER.movement.horizontal != 0;
+
+	if (has_horizontal_speed) {
+		PLAYER.xscale = sign(PLAYER.movement.horizontal);
+		image_xscale = PLAYER.xscale;
+	}
 }
 #endregion
 
@@ -51,7 +63,7 @@ function collision_player() {
 function character_weapon() {
 	if (PLAYER.equipment) {
 		attack();
-		weapon_follow_player();
+	//	weapon_follow_player();
 		discard_weapon();
 	}
 	pickup_weapon();
@@ -59,18 +71,6 @@ function character_weapon() {
 
 function attack() {
 	PLAYER.equipment.WEAPON.is_shooting = PLAYER.key.shot;
-}
-
-function weapon_follow_player() {
-	var _direction = point_direction(x, y, mouse_x, mouse_y * 1.1);
-	
-	var _x = x + lengthdir_x(sprite_height / 2.5, _direction *  PLAYER.xscale * (-1));
-	var _y = y + lengthdir_y(sprite_width / 2.5, _direction *  PLAYER.xscale * (-1));
-		
-	PLAYER.equipment.x = _x;
-	PLAYER.equipment.y = _y - (sprite_height / 3);
-	PLAYER.equipment.image_angle = _direction;
-	PLAYER.equipment.WEAPON.xscale = PLAYER.xscale;
 }
 
 function can_i_discard_weapon() {
@@ -117,32 +117,43 @@ function pickup_weapon() {
 
 #region //STATE_MACHINE
 
-function state_machine(spr_idle, spr_walking, spr_jumping) {
+function state_machine() {
 	switch(PLAYER.state) {
 		case ENTITY_STATES.IDLE:
-			state_idle(spr_idle);
+			state_idle();
 		break;
 		case ENTITY_STATES.WALKING:
-			state_walking(spr_walking);
+			state_walking();
 		break;
 		case ENTITY_STATES.JUMPING:
-			state_jumping(spr_jumping);
+			state_jumping();
+		break
+		case ENTITY_STATES.DYING:
+			state_dying();
+		break;
+		case ENTITY_STATES.DEAD:
+			state_dead();
 		break;
 	}
 }
 
-function state_idle(spr_idle) {
-	sprite_index = spr_idle;
+function state_idle() {
+	sprite_index = PLAYER.sprites.idle;
 	
 	if (PLAYER.key.left || PLAYER.key.right) {
 		PLAYER.state = ENTITY_STATES.WALKING;
 	} else if (PLAYER.key.jump) {
 		PLAYER.state = ENTITY_STATES.JUMPING;
 	}
+	
+	if (PLAYER.HP <= 0) {
+		PLAYER.HP = 0;
+		PLAYER.state = ENTITY_STATES.DYING;
+	}
 }
 
-function state_walking(spr_walking) {
-	sprite_index = spr_walking;
+function state_walking() {
+	sprite_index = PLAYER.sprites.walking;
 	
 	if (!PLAYER.key.left && !PLAYER.key.right) {
 		PLAYER.state =  ENTITY_STATES.IDLE;
@@ -150,27 +161,46 @@ function state_walking(spr_walking) {
 		PLAYER.state = ENTITY_STATES.JUMPING;
 	}
 	
-	var has_horizontal_speed = PLAYER.movement.horizontal != 0;
-
-	if (has_horizontal_speed) {
-		PLAYER.xscale = sign(PLAYER.movement.horizontal);
-	}
-	
-	image_xscale = PLAYER.xscale * (-1);
+	direct_player();
 }
 
-function state_jumping(spr_jumping) {
+function state_jumping() {
 	if (PLAYER.movement.vertical > 0) {
-		sprite_index = spr_jumping;
-		
-		if (image_index >= image_number - 1) {
-			image_index = image_number - 1;
-		}
+		// caindo
+		sprite_index = PLAYER.sprites.falling;
+	} else {
+		// subindo
+		sprite_index = PLAYER.sprites.jumping;
 	}
 	
 	if (is_stepping_on_the_floor()) {
 		PLAYER.state = ENTITY_STATES.IDLE;
 	}
+}
+
+function state_dying() {
+	sprite_index = PLAYER.sprites.dying;
+	
+	if (PLAYER.HP == 0) {
+		direction = PLAYER.hit_direction;
+		PLAYER.movement.horizontal = lengthdir_x(3, direction);	
+		PLAYER.movement.vertical = lengthdir_y(3, direction) - 4;
+		
+		show_debug_message(PLAYER.movement.horizontal);
+		
+		if (sign(PLAYER.movement.horizontal) != 0) { image_xscale = sign(PLAYER.movement.horizontal) *(-1); } 
+	}
+
+	if (is_stepping_on_the_floor() && PLAYER.movement.vertical >= 0) {
+		PLAYER.state = ENTITY_STATES.DEAD;
+	}
+	
+	PLAYER.HP = noone;
+}
+
+function state_dead() {
+	sprite_index = PLAYER.sprites.dead;
+	PLAYER.movement.horizontal = 0;
 }
 
 #endregion

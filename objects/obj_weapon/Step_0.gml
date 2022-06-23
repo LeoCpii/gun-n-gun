@@ -1,2 +1,0 @@
-gravity_weapon();
-reflect();

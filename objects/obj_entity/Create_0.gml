@@ -1,11 +1,15 @@
 enum ENTITY_STATES {
 	IDLE,
 	WALKING,
-	JUMPING
+	JUMPING,
+	DYING,
+	DEAD
 }
 
 PLAYER = {
-	life: 1,
+	HP: HP,
+	flash: 0,
+	hit_direction: 0,
 	state: ENTITY_STATES.IDLE,
 	key_map: {
 		jump: ord("W"),
@@ -42,5 +46,13 @@ PLAYER = {
 	mass: 1,
 	equipment: noone,
 	contact_area: 50,
-	xscale: 1
+	xscale: 1,
+	sprites: {
+		idle: noone,
+		walking: noone,
+		jumping: noone,
+		falling: noone,
+		dying: noone,
+		dead: noone
+	}
 }

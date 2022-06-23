@@ -5,6 +5,7 @@ WEAPON = {
 	is_shooting: false,
 	recoil: 0,
 	ammo: ammo,
+	x_distance: 0,
 	mass: 1,
 	movement: {
 		horizontal: 0,

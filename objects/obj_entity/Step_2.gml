@@ -1,1 +1,1 @@
-movements();
+gravity_player();
