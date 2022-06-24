@@ -9,8 +9,7 @@ function weapon() {
 
 	if (WEAPON.is_being_carried) {
 		follow_target();
-		follow_mouse_direction();
-		
+			
 		if (WEAPON.is_shooting) {
 			weapon_recoil();
 			shoot();
@@ -31,6 +30,8 @@ function shoot() {
 	if (WEAPON.cooldown <= 0) {
 		WEAPON.recoil = recoil;
 		WEAPON.cooldown = firing_cooldown * room_speed;
+		
+		screen_shake(2, 10);
 		
 		if (WEAPON.ammo) {			
 			var _shot = instance_create_layer(x, y, "entities", bullet);

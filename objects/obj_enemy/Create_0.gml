@@ -1,6 +1,6 @@
 event_inherited();
 
-PLAYER.sprites = {
+ENTITY.sprites = {
 	idle: spr_character_idle,
 	walking: spr_character_walking,
 	jumping: spr_character_jumping,

@@ -1,7 +1,7 @@
 with (other) {
-	PLAYER.HP--;
-	PLAYER.flash = 3;
-	PLAYER.hit_direction = other.direction;
+	ENTITY.HP--;
+	ENTITY.flash = 3;
+	ENTITY.hit_direction = other.direction;
 }
 
 instance_destroy();

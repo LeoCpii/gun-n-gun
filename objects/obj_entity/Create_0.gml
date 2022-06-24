@@ -6,7 +6,8 @@ enum ENTITY_STATES {
 	DEAD
 }
 
-PLAYER = {
+ENTITY = {
+	is_this_the_player: is_this_the_player,
 	HP: HP,
 	flash: 0,
 	hit_direction: 0,
