@@ -16,5 +16,8 @@ function field_of_vision() {
 	draw_circle(x, y, 1, true);
 }
 
-field_of_vision();
+if (global.DEBUG) {
+	field_of_vision();
+}
+
 draw_ammo();

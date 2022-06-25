@@ -27,7 +27,7 @@
   "eventList": [],
   "properties": [],
   "overriddenProperties": [
-    {"propertyId":{"name":"firing_speed","path":"objects/obj_weapon/obj_weapon.yy",},"objectId":{"name":"obj_weapon","path":"objects/obj_weapon/obj_weapon.yy",},"value":"31.2","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
+    {"propertyId":{"name":"firing_speed","path":"objects/obj_weapon/obj_weapon.yy",},"objectId":{"name":"obj_weapon","path":"objects/obj_weapon/obj_weapon.yy",},"value":"20","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
     {"propertyId":{"name":"firing_cooldown","path":"objects/obj_weapon/obj_weapon.yy",},"objectId":{"name":"obj_weapon","path":"objects/obj_weapon/obj_weapon.yy",},"value":"1.5","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
     {"propertyId":{"name":"knockback","path":"objects/obj_weapon/obj_weapon.yy",},"objectId":{"name":"obj_weapon","path":"objects/obj_weapon/obj_weapon.yy",},"value":"17.9","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
     {"propertyId":{"name":"recoil","path":"objects/obj_weapon/obj_weapon.yy",},"objectId":{"name":"obj_weapon","path":"objects/obj_weapon/obj_weapon.yy",},"value":"8.8","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},

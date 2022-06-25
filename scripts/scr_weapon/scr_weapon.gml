@@ -26,6 +26,28 @@ function follow_mouse_direction() {
 	image_angle = point_direction(x, y, mouse_x, mouse_y);
 }
 
+function follow_player() {
+	var _player = instance_find(obj_player, 0);
+	if (instance_exists(_player)) {
+		if (_player.x < x) { image_yscale = -image_yscale; }
+		if (point_distance(_player.x, _player.y, x, y) < 600) {
+			WEAPON.target.ENEMY.countdown--;
+			
+			if (WEAPON.target.ENEMY.countdown <= 0) {
+				WEAPON.target.ENEMY.countdown = WEAPON.target.countdown;
+				image_angle = point_direction(x, y, _player.x, _player.y);
+				
+				// entre a arma do inimigo e o jogar existe uma parede?
+				var _has_block_between_weapon_and_player = !collision_line(x, y, _player.x, _player.y, obj_block, false, false);
+				
+				if (_has_block_between_weapon_and_player && _player.ENTITY.HP) {
+					shoot();
+				}	
+			}
+		}
+	}
+}
+
 function shoot() {
 	if (WEAPON.cooldown <= 0) {
 		WEAPON.recoil = recoil;
@@ -33,14 +55,19 @@ function shoot() {
 		
 		screen_shake(2, 10);
 		
-		if (WEAPON.ammo) {			
-			var _shot = instance_create_layer(x, y, "entities", bullet);
+		if (WEAPON.ammo) {
+			var _diff = 12;
+			var _x_offset = lengthdir_x(_diff, image_angle);
+			var _y_offset = lengthdir_y(_diff, image_angle);
+			
+			var _shot = instance_create_layer(x + _x_offset, y + _y_offset, "bullets", bullet);
 				
 			_shot.speed = firing_speed;
 			_shot.direction = image_angle + random_range(-inprecision, inprecision);
 			_shot.image_angle = _shot.direction;
+			_shot.BULLET.shooter = WEAPON.target;
 			
-			WEAPON.ammo--;
+			//WEAPON.ammo--;
 		}
 	}
 }
@@ -67,8 +94,8 @@ function gravity_weapon() {
 }
 
 function collision_weapon() {
-	WEAPON.movement.horizontal = detect_collide("x", WEAPON.movement.horizontal, 0);
-	WEAPON.movement.vertical = detect_collide("y", 0, WEAPON.movement.vertical);
+	WEAPON.movement.horizontal = detect_collide("x", WEAPON.movement.horizontal, 0, obj_block);
+	WEAPON.movement.vertical = detect_collide("y", 0, WEAPON.movement.vertical, obj_block);
 }
 
 function should_be_reflect() {

@@ -41,7 +41,7 @@
     "path": "folders/Objects/Weapon/Big.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_big_sniper",
+  "name": "obj_weapon_big_sniper",
   "tags": [],
   "resourceType": "GMObject",
 }

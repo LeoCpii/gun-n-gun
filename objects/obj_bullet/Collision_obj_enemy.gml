@@ -1,7 +1,11 @@
+var entity_hp = 0;
 with (other) {
-	ENTITY.HP--;
-	ENTITY.flash = 3;
-	ENTITY.hit_direction = other.direction;
+	entity_hp = ENTITY.HP;
+	if (ENTITY.HP) {
+		take_damage(other.direction, "hit");
+	}
 }
 
-instance_destroy();
+if (entity_hp) {
+	instance_destroy();
+}

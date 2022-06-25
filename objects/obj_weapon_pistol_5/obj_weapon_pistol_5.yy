@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "spr_pistol_3",
-    "path": "sprites/spr_pistol_3/spr_pistol_3.yy",
+    "name": "spr_pistol_5",
+    "path": "sprites/spr_pistol_5/spr_pistol_5.yy",
   },
   "solid": false,
   "visible": true,
@@ -41,7 +41,7 @@
     "path": "folders/Objects/Weapon/Small.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_pistol_3",
+  "name": "obj_weapon_pistol_5",
   "tags": [],
   "resourceType": "GMObject",
 }

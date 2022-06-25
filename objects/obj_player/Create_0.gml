@@ -7,4 +7,5 @@ ENTITY.sprites = {
 	falling: spr_character_falling,
 	dying: spr_character_dying,
 	dead: spr_character_dead,
+	knockback: spr_character_knockback
 }

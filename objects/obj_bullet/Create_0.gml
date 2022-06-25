@@ -1,0 +1,3 @@
+BULLET = {
+	shooter: noone
+}

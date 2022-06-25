@@ -11,21 +11,21 @@ function gravity(mass) {
 }
 
 #region //COLLISION
-function will_collide(axis, horizontal_speed, vertical_speed) {
+function will_collide(axis, horizontal_speed, vertical_speed, obj_collide) {
 	return axis == "x"
-		? place_meeting(x + horizontal_speed, y, obj_block)
-		: place_meeting(x, y + vertical_speed, obj_block);
+		? place_meeting(x + horizontal_speed, y, obj_collide)
+		: place_meeting(x, y + vertical_speed, obj_collide);
 }
 
-function is_colliding(axis, horizontal_speed, vertical_speed) {
+function is_colliding(axis, horizontal_speed, vertical_speed, obj_collide) {
 	return axis == "x"
-		? place_meeting(x + sign(horizontal_speed), y, obj_block)
-		: place_meeting(x, y + sign(vertical_speed), obj_block);
+		? place_meeting(x + sign(horizontal_speed), y, obj_collide)
+		: place_meeting(x, y + sign(vertical_speed), obj_collide);
 }
 
-function detect_collide(axis, horizontal_speed, vertical_speed) {
-	if (will_collide(axis, horizontal_speed, vertical_speed)) {
-		while !is_colliding(axis, horizontal_speed, vertical_speed) {
+function detect_collide(axis, horizontal_speed, vertical_speed, obj_collide) {
+	if (will_collide(axis, horizontal_speed, vertical_speed, obj_collide)) {
+		while !is_colliding(axis, horizontal_speed, vertical_speed, obj_collide) {
 			if (axis == "x") {
 				x += sign(horizontal_speed);
 			} else {

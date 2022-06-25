@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "spr_pistol_2",
-    "path": "sprites/spr_pistol_2/spr_pistol_2.yy",
+    "name": "spr_pistol_3",
+    "path": "sprites/spr_pistol_3/spr_pistol_3.yy",
   },
   "solid": false,
   "visible": true,
@@ -34,14 +34,14 @@
     {"propertyId":{"name":"ammo","path":"objects/obj_weapon/obj_weapon.yy",},"objectId":{"name":"obj_weapon","path":"objects/obj_weapon/obj_weapon.yy",},"value":"6","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
     {"propertyId":{"name":"inprecision","path":"objects/obj_weapon/obj_weapon.yy",},"objectId":{"name":"obj_weapon","path":"objects/obj_weapon/obj_weapon.yy",},"value":"5.1","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
     {"propertyId":{"name":"bullet","path":"objects/obj_weapon/obj_weapon.yy",},"objectId":{"name":"obj_weapon","path":"objects/obj_weapon/obj_weapon.yy",},"value":"obj_bullet","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
-    {"propertyId":{"name":"x_distance","path":"objects/obj_weapon/obj_weapon.yy",},"objectId":{"name":"obj_weapon","path":"objects/obj_weapon/obj_weapon.yy",},"value":"2","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
+    {"propertyId":{"name":"x_distance","path":"objects/obj_weapon/obj_weapon.yy",},"objectId":{"name":"obj_weapon","path":"objects/obj_weapon/obj_weapon.yy",},"value":"1","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
   ],
   "parent": {
     "name": "Small",
     "path": "folders/Objects/Weapon/Small.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_pistol_2",
+  "name": "obj_weapon_pistol_3",
   "tags": [],
   "resourceType": "GMObject",
 }

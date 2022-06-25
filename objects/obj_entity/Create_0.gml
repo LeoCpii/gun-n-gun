@@ -3,7 +3,13 @@ enum ENTITY_STATES {
 	WALKING,
 	JUMPING,
 	DYING,
-	DEAD
+	DEAD,
+	KNOCKBACK
+}
+
+enum KNOCKBACK_TYPE {
+	HIT,
+	CONTACT
 }
 
 ENTITY = {
@@ -12,6 +18,10 @@ ENTITY = {
 	flash: 0,
 	hit_direction: 0,
 	state: ENTITY_STATES.IDLE,
+	knockback: {
+		speed: 0,
+		type: ""
+	},
 	key_map: {
 		jump: ord("W"),
 		down: ord("S"), 
@@ -46,6 +56,7 @@ ENTITY = {
 	},
 	mass: 1,
 	equipment: noone,
+	starting_weapon: starting_weapon,
 	contact_area: 50,
 	xscale: 1,
 	sprites: {
@@ -54,6 +65,7 @@ ENTITY = {
 		jumping: noone,
 		falling: noone,
 		dying: noone,
-		dead: noone
+		dead: noone,
+		knockback: noone
 	}
 }

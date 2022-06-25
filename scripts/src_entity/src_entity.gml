@@ -12,24 +12,24 @@ function input_check() {
 
 #region //ACTIONS
 function actions() {
-	if (ENTITY.HP > 0) {
-		walking();
-		jump();
-	}
-	
-	if (ENTITY.equipment) {
-		attack();
-	}
-	
 	collision_player();
+	
+	if (ENTITY.HP) {
+		if (!ENTITY.equipment && ENTITY.starting_weapon) {
+			show_debug_message("instanciando")
+			instance_weapon();
+		}
+		jump();
+		
+		if (ENTITY.equipment) { attack(); }
+	}
 	
 	x += ENTITY.movement.horizontal;
 	y += ENTITY.movement.vertical;
 }
 
-function walking() {
-	var _horizontal_movement = ENTITY.key.right - ENTITY.key.left;
-	ENTITY.movement.horizontal = (_horizontal_movement * ENTITY.speed.walk);
+function walking(horizontal_movement) {
+	ENTITY.movement.horizontal = (horizontal_movement * ENTITY.speed.walk);
 }
 
 function jump() {	
@@ -38,6 +38,17 @@ function jump() {
 	} 
 }
 
+function take_damage(dir, type) {
+	ENTITY.HP--;
+	ENTITY.flash = 3;
+	ENTITY.hit_direction = dir;
+	ENTITY.knockback.speed = 5;
+	ENTITY.knockback.type = type;
+	
+	if (ENTITY.HP > 0) {
+		ENTITY.state = ENTITY_STATES.KNOCKBACK;
+	}
+}
 #endregion
 
 #region //BEHAVIORS
@@ -57,8 +68,8 @@ function direct_player() {
 
 #region //COLLISION
 function collision_player() {
-	ENTITY.movement.horizontal = detect_collide("x", ENTITY.movement.horizontal, 0);
-	ENTITY.movement.vertical = detect_collide("y", 0, ENTITY.movement.vertical);
+	ENTITY.movement.horizontal = detect_collide("x", ENTITY.movement.horizontal, 0, obj_block);
+	ENTITY.movement.vertical = detect_collide("y", 0, ENTITY.movement.vertical, obj_block);
 }
 #endregion
 
@@ -94,13 +105,22 @@ function pickup_weapon() {
 	
 	if (pickup_count > 0) {
 			if (ENTITY.equipment == noone && !pickup_list[| 0].WEAPON.target) {
-				ENTITY.equipment = pickup_list[| 0];
-				ENTITY.equipment.WEAPON.target = id;
-				ENTITY.equipment.WEAPON.is_being_carried = true;
+				set_weapon(pickup_list[| 0]);
 			}
 		}
 	
 	ds_list_destroy(pickup_list);
+}
+
+function instance_weapon() {
+	var _weapon = instance_create_layer(x, y, "guns", ENTITY.starting_weapon);
+	set_weapon(_weapon);
+}
+
+function set_weapon(o_weapon) {
+	ENTITY.equipment = o_weapon;
+	ENTITY.equipment.WEAPON.target = id;
+	ENTITY.equipment.WEAPON.is_being_carried = true;
 }
 
 #endregion
@@ -124,6 +144,12 @@ function state_machine() {
 		case ENTITY_STATES.DEAD:
 			state_dead();
 		break;
+		case ENTITY_STATES.KNOCKBACK:
+			state_knockback();
+		break;
+		default:
+			ENTITY.state = ENTITY_STATES.IDLE;
+		break;
 	}
 }
 
@@ -137,9 +163,9 @@ function state_idle() {
 	}
 	
 	if (ENTITY.HP <= 0) {
+		screen_shake(6, 25);
 		ENTITY.HP = 0;
 		ENTITY.state = ENTITY_STATES.DYING;
-		screen_shake(6, 25);
 	}
 }
 
@@ -150,6 +176,12 @@ function state_walking() {
 		ENTITY.state =  ENTITY_STATES.IDLE;
 	} else if (ENTITY.key.jump) {
 		ENTITY.state = ENTITY_STATES.JUMPING;
+	}
+	
+	if (ENTITY.HP <= 0) {
+		screen_shake(6, 25);
+		ENTITY.HP = 0;
+		ENTITY.state = ENTITY_STATES.DYING;
 	}
 	
 	direct_player();
@@ -167,19 +199,30 @@ function state_jumping() {
 	if (is_stepping_on_the_floor()) {
 		ENTITY.state = ENTITY_STATES.IDLE;
 	}
+	
+	if (ENTITY.HP <= 0) {
+		screen_shake(6, 25);
+		ENTITY.HP = 0;
+		ENTITY.state = ENTITY_STATES.DYING;
+	}
 }
 
 function state_dying() {
 	sprite_index = ENTITY.sprites.dying;
 	
 	if (ENTITY.HP == 0) {
-		direction = ENTITY.hit_direction;
-		ENTITY.movement.horizontal = lengthdir_x(3, direction);	
+		if (ENTITY.knockback.type == KNOCKBACK_TYPE.HIT) {
+			direction = ENTITY.hit_direction;
+			ENTITY.movement.horizontal = lengthdir_x(3, direction);	
+		}
+		
+		if (ENTITY.knockback.type == KNOCKBACK_TYPE.CONTACT) {
+			ENTITY.movement.horizontal = lengthdir_x(3, direction) * -ENTITY.xscale;	
+		}
+
 		ENTITY.movement.vertical = lengthdir_y(3, direction) - 4;
 		
-		show_debug_message(ENTITY.movement.horizontal);
-		
-		if (sign(ENTITY.movement.horizontal) != 0) { image_xscale = sign(ENTITY.movement.horizontal) *(-1); } 
+		if (sign(ENTITY.movement.horizontal) != 0) { image_xscale = sign(ENTITY.movement.horizontal) * (-1); } 
 	}
 
 	if (is_stepping_on_the_floor() && ENTITY.movement.vertical >= 0) {
@@ -192,6 +235,40 @@ function state_dying() {
 function state_dead() {
 	sprite_index = ENTITY.sprites.dead;
 	ENTITY.movement.horizontal = 0;
+}
+
+function state_knockback() {
+	sprite_index = ENTITY.sprites.knockback;
+	direction = ENTITY.hit_direction;
+	
+	if (ENTITY.knockback.type == KNOCKBACK_TYPE.HIT) {
+		var _dir = lengthdir_x(ENTITY.knockback.speed, direction)
+		image_xscale = -sign(_dir);
+		ENTITY.movement.horizontal = _dir;
+	}
+	
+	if (ENTITY.knockback.type == KNOCKBACK_TYPE.CONTACT) {
+		ENTITY.movement.horizontal = ENTITY.knockback.speed * -image_xscale;
+	}
+	
+	ENTITY.knockback.speed = approach(ENTITY.knockback.speed, 0, 0.25);
+	
+	if (ENTITY.knockback.speed == 0) {
+		ENTITY.movement.horizontal = 0;
+		ENTITY.state = ENTITY_STATES.IDLE;
+	}
+}
+
+function approach(current, target, amount) {
+	if (current < target) {
+		current += amount;
+		current = min(current, target);
+	} else {
+		current -= amount;
+		current = max(current, target);
+	}
+	
+	return current;
 }
 
 #endregion
