@@ -4,4 +4,4 @@ with (other) {
 	_enemy_has_life = ENTITY.HP;
 }
 
-if (_enemy_has_life) { take_damage(0, KNOCKBACK_TYPE.CONTACT); };
+if (_enemy_has_life && ENTITY.HP) { take_damage(0, KNOCKBACK_TYPE.CONTACT); };

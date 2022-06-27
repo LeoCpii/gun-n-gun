@@ -2,7 +2,7 @@ function enemy_actions() {
 	if (ENTITY.HP) {
 		if (ENTITY.equipment) {
 			with (ENTITY.equipment) {
-				//follow_player();
+				follow_player();
 			}
 		}
 	} else {

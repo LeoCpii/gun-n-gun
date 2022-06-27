@@ -1,1 +1,1 @@
-gravity_player();
+gravity_entity();

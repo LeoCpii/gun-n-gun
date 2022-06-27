@@ -32,10 +32,10 @@ function follow_player() {
 		if (_player.x < x) { image_yscale = -image_yscale; }
 		if (point_distance(_player.x, _player.y, x, y) < 600) {
 			WEAPON.target.ENEMY.countdown--;
+			image_angle = point_direction(x, y, _player.x, _player.y);
 			
 			if (WEAPON.target.ENEMY.countdown <= 0) {
 				WEAPON.target.ENEMY.countdown = WEAPON.target.countdown;
-				image_angle = point_direction(x, y, _player.x, _player.y);
 				
 				// entre a arma do inimigo e o jogar existe uma parede?
 				var _has_block_between_weapon_and_player = !collision_line(x, y, _player.x, _player.y, obj_block, false, false);

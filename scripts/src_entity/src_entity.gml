@@ -51,7 +51,7 @@ function take_damage(dir, type) {
 #endregion
 
 #region //BEHAVIORS
-function gravity_player() {
+function gravity_entity() {
 	ENTITY.movement.vertical += gravity(ENTITY.mass);
 }
 
