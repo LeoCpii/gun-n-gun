@@ -26,3 +26,8 @@ function player_actions() {
 		}	
 	}
 }
+
+function direct_player() {
+	var _should_be_reflect = x > mouse_x;
+	image_xscale = _should_be_reflect ? -1 : 1;
+}

@@ -11,8 +11,8 @@ function weapon() {
 		follow_target();
 			
 		if (WEAPON.is_shooting) {
-			weapon_recoil();
 			shoot();
+			weapon_recoil();
 		}
 	}
 }
@@ -54,6 +54,8 @@ function shoot() {
 		WEAPON.cooldown = firing_cooldown * room_speed;
 		
 		screen_shake(2, 10);
+		
+		show_debug_message(mouse_x);
 		
 		if (WEAPON.ammo) {
 			var _diff = 12;

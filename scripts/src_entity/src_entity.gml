@@ -16,7 +16,6 @@ function actions() {
 	
 	if (ENTITY.HP) {
 		if (!ENTITY.equipment && ENTITY.starting_weapon) {
-			show_debug_message("instanciando")
 			instance_weapon();
 		}
 		jump();
@@ -56,14 +55,6 @@ function gravity_player() {
 	ENTITY.movement.vertical += gravity(ENTITY.mass);
 }
 
-function direct_player() {
-	var has_horizontal_speed = ENTITY.movement.horizontal != 0;
-
-	if (has_horizontal_speed) {
-		ENTITY.xscale = sign(ENTITY.movement.horizontal);
-		image_xscale = ENTITY.xscale;
-	}
-}
 #endregion
 
 #region //COLLISION
@@ -104,10 +95,10 @@ function pickup_weapon() {
 	var pickup_count = collision_circle_list(x, y, ENTITY.contact_area, obj_weapon, false, true, pickup_list, true);
 	
 	if (pickup_count > 0) {
-			if (ENTITY.equipment == noone && !pickup_list[| 0].WEAPON.target) {
-				set_weapon(pickup_list[| 0]);
-			}
+		if (ENTITY.equipment == noone && !pickup_list[| 0].WEAPON.target) {
+			set_weapon(pickup_list[| 0]);
 		}
+	}
 	
 	ds_list_destroy(pickup_list);
 }
@@ -183,8 +174,6 @@ function state_walking() {
 		ENTITY.HP = 0;
 		ENTITY.state = ENTITY_STATES.DYING;
 	}
-	
-	direct_player();
 }
 
 function state_jumping() {

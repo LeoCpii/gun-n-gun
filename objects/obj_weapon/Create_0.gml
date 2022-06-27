@@ -12,5 +12,13 @@ WEAPON = {
 		vertical: 0
 	},
 	speed: 0,
-	xscale: 1
+	xscale: 1,
+	animation: {
+		x: x,
+		image_angle: image_angle,
+		curve: {
+			position: 0,
+			speed: 0
+		}
+	}
 }
