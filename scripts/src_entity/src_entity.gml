@@ -15,12 +15,14 @@ function actions() {
 	collision_player();
 	
 	if (ENTITY.HP) {
-		if (!ENTITY.equipment && ENTITY.starting_weapon) {
-			instance_weapon();
-		}
-		jump();
-		
+		var _should_intance_weapon = !ENTITY.equipment && ENTITY.starting_weapon
+	
 		if (ENTITY.equipment) { attack(); }
+		else {
+			if (_should_intance_weapon) { instance_weapon(); }
+		}
+
+		jump();
 	}
 	
 	x += ENTITY.movement.horizontal;
@@ -112,6 +114,9 @@ function set_weapon(o_weapon) {
 	ENTITY.equipment = o_weapon;
 	ENTITY.equipment.WEAPON.target = id;
 	ENTITY.equipment.WEAPON.is_being_carried = true;
+	var testx = lengthdir_x(x, direction);
+	var testy = lengthdir_y(y, direction);
+	ENTITY.equipment.image_angle = point_direction(x, y, x + testx, y + testy);	
 }
 
 #endregion

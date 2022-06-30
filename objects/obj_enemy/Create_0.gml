@@ -10,6 +10,10 @@ ENTITY.sprites = {
 	knockback: spr_player_base_knockback
 }
 
+ENTITY.speed.walk = speed_walk;
+
 ENEMY = {
-	countdown: countdown
+	countdown: countdown,
+	see_player: false,
+	target: noone
 }

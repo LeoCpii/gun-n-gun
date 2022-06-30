@@ -1,5 +1,6 @@
 function player_actions() {
 	if (ENTITY.HP) {
+		direct_player();
 		var _can_discard = can_i_discard_weapon();
 	
 		if (!ENTITY.knockback.speed) {

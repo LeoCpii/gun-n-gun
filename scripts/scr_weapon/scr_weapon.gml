@@ -19,31 +19,20 @@ function weapon() {
 
 function follow_target() {
 	x = WEAPON.target.x + (x_distance * 5) * image_yscale;
-	y = WEAPON.target.y + 10;
+	y = WEAPON.target.y + 15;
 }
 
 function follow_mouse_direction() {
 	image_angle = point_direction(x, y, mouse_x, mouse_y);
 }
 
-function follow_player() {
+function aim_the_player() {
 	var _player = instance_find(obj_player, 0);
 	if (instance_exists(_player)) {
 		if (_player.x < x) { image_yscale = -image_yscale; }
 		if (point_distance(_player.x, _player.y, x, y) < 600) {
 			WEAPON.target.ENEMY.countdown--;
 			image_angle = point_direction(x, y, _player.x, _player.y);
-			
-			if (WEAPON.target.ENEMY.countdown <= 0) {
-				WEAPON.target.ENEMY.countdown = WEAPON.target.countdown;
-				
-				// entre a arma do inimigo e o jogar existe uma parede?
-				var _has_block_between_weapon_and_player = !collision_line(x, y, _player.x, _player.y, obj_block, false, false);
-				
-				if (_has_block_between_weapon_and_player && _player.ENTITY.HP) {
-					shoot();
-				}	
-			}
 		}
 	}
 }
@@ -54,8 +43,6 @@ function shoot() {
 		WEAPON.cooldown = firing_cooldown * room_speed;
 		
 		screen_shake(2, 10);
-		
-		show_debug_message(mouse_x);
 		
 		if (WEAPON.ammo) {
 			var _diff = 12;
@@ -69,7 +56,7 @@ function shoot() {
 			_shot.image_angle = _shot.direction;
 			_shot.BULLET.shooter = WEAPON.target;
 			
-			//WEAPON.ammo--;
+			WEAPON.ammo--;
 		}
 	}
 }
